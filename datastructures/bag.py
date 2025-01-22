@@ -4,6 +4,15 @@ from datastructures.ibag import IBag, T
 
 class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
+        self.__bag = {}
+
+        if items is not None:
+            for item in items:
+                if item in self.__bag:
+                    self.__bag[item] += 1
+                else:
+                    self.__bag[item] = 1
+                    
         raise NotImplementedError("__init__ method not implemented")
 
     def add(self, item: T) -> None:
@@ -18,7 +27,7 @@ class Bag(IBag[T]):
     def __len__(self) -> int:
         raise NotImplementedError("__len__ method not implemented")
 
-    def distinct_items(self) -> int:
+    def distinct_items(self) -> Iterable[T]:
         raise NotImplementedError("distinct_items method not implemented")
 
     def __contains__(self, item) -> bool:
