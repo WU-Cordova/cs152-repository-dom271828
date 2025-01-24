@@ -8,11 +8,11 @@ class Bag(IBag[T]):
 
         if items is not None:
             for item in items:
-                if item in self.__bag:
+                if item in self.__bag: # put in add function
                     self.__bag[item] += 1
                 else:
                     self.__bag[item] = 1
-                    
+
         raise NotImplementedError("__init__ method not implemented")
 
     def add(self, item: T) -> None:
