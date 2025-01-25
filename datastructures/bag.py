@@ -5,6 +5,7 @@ from datastructures.ibag import IBag, T
 class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
         self.__bag = { }
+        self.__count = 0
         if items is not None:
             for item in items:
                 if item in self.__bag: # put in add function
@@ -17,6 +18,7 @@ class Bag(IBag[T]):
             self.__bag[item] += 1
         else:
             self.__bag[item] = 1
+        self.__count += 1
         if item == None:
             raise TypeError("NoneType added")
         # raise NotImplementedError("add method not implemented")
@@ -24,6 +26,7 @@ class Bag(IBag[T]):
     def remove(self, item: T) -> None:
         if item in self.__bag:
             self.__bag[item] -= 1
+            self.__count -= 1
         else:
             raise ValueError
         # raise NotImplementedError("remove method not implemented")
@@ -35,7 +38,8 @@ class Bag(IBag[T]):
             return 0
 
     def __len__(self) -> int:
-        raise NotImplementedError("__len__ method not implemented")
+        return self.__count
+        # raise NotImplementedError("__len__ method not implemented")
 
     def distinct_items(self) -> Iterable[T]:
         raise NotImplementedError("distinct_items method not implemented")
@@ -44,4 +48,5 @@ class Bag(IBag[T]):
         raise NotImplementedError("__contains__ method not implemented")
 
     def clear(self) -> None:
-        raise NotImplementedError("clear method not implemented")
+        self.__bag = { }
+        # raise NotImplementedError("clear method not implemented")
