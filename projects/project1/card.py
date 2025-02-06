@@ -21,11 +21,15 @@ class CardFace(Enum):
     JACK = "10"
     QUEEN = "10"
     KING = "10"
-    ACE = "11"
+    ACE = ["1","11"]
 
 @dataclass
 class Card:
     card_face: CardFace
     card_suit: CardSuit
 
+class MultiDeck:
+    pass
 
+class Game:
+    pass

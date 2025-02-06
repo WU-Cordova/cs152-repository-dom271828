@@ -1,5 +1,7 @@
-from datastructures.bag import Bag
-from projects.project1.card import Card, CardSuit, CardFace
+# from datastructures.bag import Bag
+from card import Card, CardSuit, CardFace
+class Game:
+    pass
 
 def main():
     
