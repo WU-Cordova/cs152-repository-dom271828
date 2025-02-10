@@ -48,7 +48,6 @@ def main():
     print("".join(str(card) for card in multi_deck_list))
 
     deck_bag = Bag(*multi_deck_list)
-    print(list(deck_bag.distinct_items()))
     two_cards = random.sample(list(deck_bag.distinct_items()), 2)
     print(f"Two cards: {"".join(str(card) for card in two_cards)} with a face value of: {sum(card.card_face.face_value() for card in two_cards)}")
 
