@@ -36,7 +36,7 @@ class Game:
             return 1
         return value
 
-    def bagjack(self):
+    def run(self):
         finished = False
 
         while finished != True:
@@ -49,7 +49,6 @@ class Game:
             pscore: int = 0
             dscore: int = 0
             turn: int = 0
-
         
 
             while finishround != True:
@@ -90,7 +89,8 @@ class Game:
                     while dscore < 17:
                         dscore += self.drawtohand(deck_bag, self.__dealerhand, dscore)
                     print()
-                    print(f"Dealer's Hand Is: {"".join(str(card) for card in self.__dealerhand)} | Score: {dscore}")
+                    if dscore != 21:
+                        print(f"Dealer's Hand Is: {"".join(str(card) for card in self.__dealerhand)} | Score: {dscore}")
                     finishround = True
                     if dscore > 21 or pscore > 21:
                         bust = True
@@ -120,17 +120,12 @@ class Game:
             elif gameover == "N":
                 finished = True
 
-
-
         print("Thanks for playing!") 
-    # card.card_face.value
-    
-    pass
 
 
 def main():
     BagJack = Game()
-    BagJack.bagjack()
+    BagJack.run()
 
 
 if __name__ == '__main__':
