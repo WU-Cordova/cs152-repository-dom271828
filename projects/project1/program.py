@@ -3,13 +3,11 @@ from projects.project1.card import Card, CardSuit, CardFace
 import random
 import copy
 
-DEBUG = True
 class MultiDeck:
 
     def __init__(self):
         one_deck_list = [Card(face, suit) for suit in CardSuit for face in CardFace]
         deck_count = random.choice([2, 4, 6, 8])
-        DEBUG and print(f"This deck consists of {deck_count} decks")
         multi_deck_list = [card for _ in range(deck_count) for card in copy.deepcopy(one_deck_list)]
         random.shuffle(multi_deck_list)
         self._deck = multi_deck_list
@@ -41,6 +39,8 @@ class Game:
 
         while finished != True:
 
+            self.__playerhand.clear()
+            self.__dealerhand.clear()
             finishround: bool = False
             bust: bool = False
             blackjack: bool = False
@@ -50,22 +50,21 @@ class Game:
             dscore: int = 0
             turn: int = 0
         
-
             while finishround != True:
                 if turn == 0:
 
                     for _ in range(2):
                         pscore += self.drawtohand(deck_bag, self.__playerhand, pscore)
                         dscore += self.drawtohand(deck_bag, self.__dealerhand, dscore)
-                    
                 
                     print(f"Player's Hand Is: {"".join(str(card) for card in self.__playerhand)} | Score: {pscore}")
+                    
                     match dscore:
                         case 21:
                             print(f"Dealer's Hand Is: {"".join(str(card) for card in self.__dealerhand)} | Score: {dscore}")
                         case _:
                             print(f"Dealer's Hand Is: {"".join(str(self.__dealerhand[0]))} [Hidden] | Score: {self.__dealerhand[0].card_face.face_value()}")
-                    print()
+                            print()
 
                     if dscore == 21 or pscore == 21:
                         turn += 1
@@ -114,8 +113,6 @@ class Game:
             
             gameover = input("Would you like to play again? (Y)es or (N)o ").strip().upper()
             if gameover == "Y":
-                self.__playerhand.clear()
-                self.__dealerhand.clear()
                 finishround = False
             elif gameover == "N":
                 finished = True
