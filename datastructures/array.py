@@ -11,21 +11,40 @@ import os
 from typing import Any, Iterator, overload
 import numpy as np
 from numpy.typing import NDArray
-
+import copy
 
 from datastructures.iarray import IArray, T
 
 
 class Array(IArray[T]):  
 
-    def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
-        raise NotImplementedError('Constructor not implemented.')
+    def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: # by Friday: __init__ implemented & sunny day cases of get/setters
+        self.__logical_size = len(starting_sequence)
+        self.__capacity = self.__logical_size # physical size
+        self.__datatype = data_type
+        
+        self.__elements = np.empty(self.__logical_size, dtype = self.__datatype) # creates an empty array with logical size as size and datatype as dtype
+
+        for i in range(self.__logical_size):
+            self.__elements[i] = copy.deepcopy(starting_sequence[i]) 
 
     @overload
     def __getitem__(self, index: int) -> T: ...
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
+        if isinstance(index, slice):
+            start: int = slice.start
+            stop: int = slice.stop
+            step: int = slice.step
+
+            # check if start/stop are inbounds; if not raise exception
+            return Array(starting_sequence=self.__elements[start:stop:step].tolist, data_type=self.__datatype)
+        
+        elif isinstance(index, int):
+            # same check: see if index is out of bounds & if so raise exception
+            return self.__elements[index] # item if index is int
+    
         raise NotImplementedError('Indexing not implemented.')
     
     def __setitem__(self, index: int, item: T) -> None:

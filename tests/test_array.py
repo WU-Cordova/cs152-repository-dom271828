@@ -9,11 +9,11 @@ class TestArray:
     car2 = Car('456', Color.BLUE, Make.TOYOTA, Model.CIVIC)
     car3 = Car('789', Color.BLACK, Make.FORD, Model.FUSION)
 
-    @pytest.fixture
+    @pytest.fixture # arrange
     def setup_complex_object_array(self) -> Array[Car]:
         return Array[Car](starting_sequence=[self.car1, self.car2, self.car3], data_type=Car)
 
-    @pytest.fixture
+    @pytest.fixture # arrange
     def setup_numerical_array(self) -> Array[int]:
         return Array[int](starting_sequence=[i for i in range(10)], data_type=int)
 
