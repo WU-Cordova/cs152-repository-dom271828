@@ -23,6 +23,9 @@ class Array(IArray[T]):
         self.__capacity = self.__logical_size # physical size
         self.__datatype = data_type
         
+        if not isinstance(starting_sequence, Sequence):
+            raise ValueError("Starting sequence is not a sequence")
+        
         self.__elements = np.empty(self.__logical_size, dtype = self.__datatype) # creates an empty array with logical size as size and datatype as dtype
 
         for i in range(self.__logical_size):
@@ -44,6 +47,9 @@ class Array(IArray[T]):
         elif isinstance(index, int):
             # same check: see if index is out of bounds & if so raise exception
             return self.__elements[index] # item if index is int
+        
+        elif not isinstance(index, int) or isinstance(index, slice):
+            raise TypeError("Ts index is neither a slice or index")
     
         # raise NotImplementedError('Indexing not implemented.')
     
@@ -57,7 +63,12 @@ class Array(IArray[T]):
         # raise NotImplementedError('Indexing not implemented.')
 
     def append(self, data: T) -> None:
-        raise NotImplementedError('Append not implemented.')
+        print("size pre-append is", self.__logical_size)
+        self.__logical_size += 1
+        self.__elements[self.__logical_size] = data
+        print(self.__logical_size)
+        return None
+        # raise NotImplementedError('Append not implemented.')
 
     def append_front(self, data: T) -> None:
         raise NotImplementedError('Append front not implemented.')
@@ -70,16 +81,24 @@ class Array(IArray[T]):
 
     def __len__(self) -> int:
         return self.__logical_size
-        raise NotImplementedError('Length not implemented.')
+        # raise NotImplementedError('Length not implemented.')
 
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError('Equality not implemented.')
+        if not isinstance(other, Array):
+            return False
+        elif self.__logical_size != other.__logical_size:
+            return False
+        elif self.__elements != self.__elements:
+            return False
+        else:
+            return True
+        # raise NotImplementedError('Equality not implemented.')
     
     def __iter__(self) -> Iterator[T]:
         raise NotImplementedError('Iteration not implemented.')
 
     def __reversed__(self) -> Iterator[T]:
-        raise
+        return True
 
     def __delitem__(self, index: int) -> None:
         raise NotImplementedError('Delete not implemented.')
@@ -95,10 +114,10 @@ class Array(IArray[T]):
         # raise NotImplementedError('Clear not implemented.')
 
     def __str__(self) -> str:
-        return '[' + ', '.join(str(item) for item in self) + ']'
+        return '[' + ', '.join(str(item) for item in self.__elements) + ']'
     
     def __repr__(self) -> str:
-        return f'Array {self.__str__()}, Logical: {self.__item_count}, Physical: {len(self.__items)}, type: {self.__data_type}'
+        return f'Array {self.__str__()}, Logical: {self.__logical_size}, Physical: {self.__capacity}, type: {self.__datatype}'
     
 
 if __name__ == '__main__':
