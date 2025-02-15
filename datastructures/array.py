@@ -19,6 +19,9 @@ from datastructures.iarray import IArray, T
 class Array(IArray[T]):  
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: # by Friday: __init__ implemented & sunny day cases of get/setters
+        if not isinstance(starting_sequence, Sequence):
+            raise ValueError("Starting sequence is not a sequence")
+        
         self.__logical_size = len(starting_sequence)
         self.__capacity = self.__logical_size # physical size
         self.__datatype = data_type
@@ -86,12 +89,10 @@ class Array(IArray[T]):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Array):
             return False
-        elif self.__logical_size != other.__logical_size:
-            return False
-        elif self.__elements != self.__elements:
-            return False
-        else:
+        if self.__elements == other.__elements and self.__logical_size == other.__logical_size:
             return True
+        else:
+            return False
         # raise NotImplementedError('Equality not implemented.')
     
     def __iter__(self) -> Iterator[T]:
