@@ -45,10 +45,16 @@ class Array(IArray[T]):
             # same check: see if index is out of bounds & if so raise exception
             return self.__elements[index] # item if index is int
     
-        raise NotImplementedError('Indexing not implemented.')
+        # raise NotImplementedError('Indexing not implemented.')
     
     def __setitem__(self, index: int, item: T) -> None:
-        raise NotImplementedError('Indexing not implemented.')
+        if index in range(self.__elements) and type(item) == self.__datatype:
+            self.__elements[index] = item
+        elif index not in range(self.__elements):
+            raise ValueError("Index is out of bounds")
+        elif type(item != self.__datatype):
+            raise TypeError("item does not match datatype")
+        # raise NotImplementedError('Indexing not implemented.')
 
     def append(self, data: T) -> None:
         raise NotImplementedError('Append not implemented.')
@@ -62,7 +68,8 @@ class Array(IArray[T]):
     def pop_front(self) -> None:
         raise NotImplementedError('Pop front not implemented.')
 
-    def __len__(self) -> int: 
+    def __len__(self) -> int:
+        return self.__logical_size
         raise NotImplementedError('Length not implemented.')
 
     def __eq__(self, other: object) -> bool:
@@ -78,10 +85,14 @@ class Array(IArray[T]):
         raise NotImplementedError('Delete not implemented.')
 
     def __contains__(self, item: Any) -> bool:
-        raise NotImplementedError('Contains not implemented.')
+        return item in self.__elements 
+        # raise NotImplementedError('Contains not implemented.')
 
     def clear(self) -> None:
-        raise NotImplementedError('Clear not implemented.')
+        self.__logical_size = 0
+        self.__capacity = 0
+        self.__elements = np.empty(self.__logical_size, dtype = self.__datatype)
+        # raise NotImplementedError('Clear not implemented.')
 
     def __str__(self) -> str:
         return '[' + ', '.join(str(item) for item in self) + ']'
