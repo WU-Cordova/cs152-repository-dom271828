@@ -26,9 +26,10 @@ class Array(IArray[T]):
         self.__capacity = self.__logical_size # physical size
         self.__datatype = data_type
         
-        if not isinstance(starting_sequence, Sequence):
-            raise ValueError("Starting sequence is not a sequence")
-        
+        for i in starting_sequence:
+            if type(i) != data_type:
+                raise TypeError
+            
         self.__elements = np.empty(self.__logical_size, dtype = self.__datatype) # creates an empty array with logical size as size and datatype as dtype
 
         for i in range(self.__logical_size):
@@ -68,18 +69,28 @@ class Array(IArray[T]):
     def append(self, data: T) -> None:
         print("size pre-append is", self.__logical_size)
         self.__logical_size += 1
-        self.__elements[self.__logical_size] = data
+        self.__elements[self.__logical_size - 2] = data
         print(self.__logical_size)
         return None
         # raise NotImplementedError('Append not implemented.')
 
     def append_front(self, data: T) -> None:
+        print("size pre-append is", self.__logical_size)
+        self.__logical_size += 1
+        self.__elements[0] = data
+        print(self.__logical_size)
+        return None
         raise NotImplementedError('Append front not implemented.')
 
     def pop(self) -> None:
+        for i in range(self.__logical_size - 1):
+            self.__elements[i] = self.__elements[i + 1]
         raise NotImplementedError('Pop not implemented.')
     
     def pop_front(self) -> None:
+        for i in range(0, self.__logical_size - 1):
+            self.__elements[i] = self.__elements[i + 1]
+        self.__logical_size -= 1
         raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int:
@@ -96,13 +107,16 @@ class Array(IArray[T]):
         # raise NotImplementedError('Equality not implemented.')
     
     def __iter__(self) -> Iterator[T]:
-        raise NotImplementedError('Iteration not implemented.')
+        for i in range(self.__logical_size):
+            yield self.__elements[i]
 
     def __reversed__(self) -> Iterator[T]:
         return True
 
     def __delitem__(self, index: int) -> None:
-        raise NotImplementedError('Delete not implemented.')
+        for i in range(index, self.__logical_size - 1):
+            self.__elements[i] = self.__elements[i + 1]
+        self.__logical_size -= 1
 
     def __contains__(self, item: Any) -> bool:
         return item in self.__elements 
@@ -111,7 +125,7 @@ class Array(IArray[T]):
     def clear(self) -> None:
         self.__logical_size = 0
         self.__capacity = 0
-        self.__elements = np.empty(self.__logical_size, dtype = self.__datatype)
+        self.__elements = np.empty(0, dtype = self.__datatype)
         # raise NotImplementedError('Clear not implemented.')
 
     def __str__(self) -> str:
