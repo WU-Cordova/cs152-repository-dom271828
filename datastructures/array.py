@@ -24,10 +24,10 @@ class Array(IArray[T]):
         
         self.__logical_size = len(starting_sequence)
         self.__capacity = self.__logical_size # physical size
-        self.__datatype = data_type
+        self.__datatype = type(starting_sequence[0]) if data_type == object else data_type
         
         for i in starting_sequence:
-            if type(i) != data_type:
+            if type(i) != self.__datatype:
                 raise TypeError
             
         self.__elements = np.empty(self.__logical_size, dtype = self.__datatype) # creates an empty array with logical size as size and datatype as dtype
@@ -41,12 +41,16 @@ class Array(IArray[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         if isinstance(index, slice):
-            start: int = slice.start
-            stop: int = slice.stop
-            step: int = slice.step
+            if index.start > self.__logical_size - 1 or index.stop > self.__logical_size - 1:
+                raise ValueError
+            
+            start: int = 0 if index.start == None else index.start
+            stop: int = index.stop
+            step: int = 1 if index.step == None else index.step
 
+            items_to_return = self.__elements[index]
             # check if start/stop are inbounds; if not raise exception
-            return Array(starting_sequence=self.__elements[start:stop:step].tolist, data_type=self.__datatype)
+            return Array(starting_sequence=items_to_return[start - 1:stop:step].tolist(), data_type=self.__datatype)
         
         elif isinstance(index, int):
             # same check: see if index is out of bounds & if so raise exception
@@ -67,31 +71,28 @@ class Array(IArray[T]):
         # raise NotImplementedError('Indexing not implemented.')
 
     def append(self, data: T) -> None:
-        print("size pre-append is", self.__logical_size)
         self.__logical_size += 1
         self.__elements[self.__logical_size - 2] = data
-        print(self.__logical_size)
         return None
         # raise NotImplementedError('Append not implemented.')
 
     def append_front(self, data: T) -> None:
-        print("size pre-append is", self.__logical_size)
         self.__logical_size += 1
+        self.__capacity += 1
         self.__elements[0] = data
-        print(self.__logical_size)
         return None
         raise NotImplementedError('Append front not implemented.')
 
     def pop(self) -> None:
-        for i in range(self.__logical_size - 1):
-            self.__elements[i] = self.__elements[i + 1]
-        raise NotImplementedError('Pop not implemented.')
+        self.__elements = self.__elements[:self.__logical_size - 1]
+        self.__logical_size -= 1
+        # raise NotImplementedError('Pop not implemented.')
     
     def pop_front(self) -> None:
         for i in range(0, self.__logical_size - 1):
             self.__elements[i] = self.__elements[i + 1]
         self.__logical_size -= 1
-        raise NotImplementedError('Pop front not implemented.')
+        # raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int:
         return self.__logical_size
@@ -100,10 +101,14 @@ class Array(IArray[T]):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Array):
             return False
-        if self.__elements == other.__elements and self.__logical_size == other.__logical_size:
-            return True
-        else:
+        if self.__logical_size != other.__logical_size:
             return False
+
+        for i in range(self.__logical_size):
+            if self.__elements[i] != other.__elements[i]:
+                return False
+            
+        return True
         # raise NotImplementedError('Equality not implemented.')
     
     def __iter__(self) -> Iterator[T]:

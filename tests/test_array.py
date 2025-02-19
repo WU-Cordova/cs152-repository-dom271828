@@ -117,6 +117,7 @@ class TestArray:
             setup_numerical_array[0] = 'string'
 
     def test_bracket_operator_should_return_a_slice_of_the_array_if_a_slice_is_passed_in(self, setup_numerical_array: Array):
+        print("test array is", setup_numerical_array[1:5])
         assert setup_numerical_array[1:5] == Array([1, 2, 3, 4])
 
     def test_constructor_should_raise_a_value_error_if_the_sequence_passed_in_is_not_a_sequence(self):
