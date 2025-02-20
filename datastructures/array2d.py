@@ -14,6 +14,7 @@ class Array2D(IArray2D[T]):
             raise NotImplementedError('Row.__init__ not implemented.')
 
         def __getitem__(self, column_index: int) -> T:
+            # returns row
             raise NotImplementedError('Row.__getitem__ not implemented.')
         
         def __setitem__(self, column_index: int, value: T) -> None:

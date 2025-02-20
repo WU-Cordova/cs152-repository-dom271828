@@ -18,7 +18,7 @@ from datastructures.iarray import IArray, T
 
 class Array(IArray[T]):  
 
-    def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: # by Friday: __init__ implemented & sunny day cases of get/setters
+    def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
         if not isinstance(starting_sequence, Sequence):
             raise ValueError("Starting sequence is not a sequence")
         
@@ -30,7 +30,7 @@ class Array(IArray[T]):
             if type(i) != self.__datatype:
                 raise TypeError
             
-        self.__elements = np.empty(self.__logical_size, dtype = self.__datatype) # creates an empty array with logical size as size and datatype as dtype
+        self.__elements = np.empty(self.__logical_size, dtype = self.__datatype)
 
         for i in range(self.__logical_size):
             self.__elements[i] = copy.deepcopy(starting_sequence[i]) 
@@ -49,17 +49,14 @@ class Array(IArray[T]):
             step: int = 1 if index.step == None else index.step
 
             items_to_return = self.__elements[index]
-            # check if start/stop are inbounds; if not raise exception
             return Array(starting_sequence=items_to_return[start - 1:stop:step].tolist(), data_type=self.__datatype)
         
         elif isinstance(index, int):
-            # same check: see if index is out of bounds & if so raise exception
-            return self.__elements[index] # item if index is int
+            return self.__elements[index]
         
         elif not isinstance(index, int) or isinstance(index, slice):
             raise TypeError("Ts index is neither a slice or index")
     
-        # raise NotImplementedError('Indexing not implemented.')
     
     def __setitem__(self, index: int, item: T) -> None:
         if index in range(self.__elements) and type(item) == self.__datatype:
@@ -68,35 +65,37 @@ class Array(IArray[T]):
             raise ValueError("Index is out of bounds")
         elif type(item != self.__datatype):
             raise TypeError("item does not match datatype")
-        # raise NotImplementedError('Indexing not implemented.')
 
     def append(self, data: T) -> None:
         self.__logical_size += 1
         self.__elements[self.__logical_size - 2] = data
+        if self.__logical_size == self.__capacity:
+            self.__capacity *= 2
         return None
-        # raise NotImplementedError('Append not implemented.')
 
     def append_front(self, data: T) -> None:
         self.__logical_size += 1
-        self.__capacity += 1
+        if self.__logical_size == self.__capacity:
+            self.__capacity *= 2
         self.__elements[0] = data
         return None
-        raise NotImplementedError('Append front not implemented.')
 
     def pop(self) -> None:
         self.__elements = self.__elements[:self.__logical_size - 1]
         self.__logical_size -= 1
-        # raise NotImplementedError('Pop not implemented.')
+        if self.__logical_size <= self.__capacity//4:
+            self.__capacity //= 2
     
     def pop_front(self) -> None:
         for i in range(0, self.__logical_size - 1):
             self.__elements[i] = self.__elements[i + 1]
         self.__logical_size -= 1
-        # raise NotImplementedError('Pop front not implemented.')
+        if self.__logical_size <= self.__capacity//4:
+            self.__capacity //= 2
+
 
     def __len__(self) -> int:
         return self.__logical_size
-        # raise NotImplementedError('Length not implemented.')
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Array):
@@ -109,14 +108,14 @@ class Array(IArray[T]):
                 return False
             
         return True
-        # raise NotImplementedError('Equality not implemented.')
     
     def __iter__(self) -> Iterator[T]:
         for i in range(self.__logical_size):
             yield self.__elements[i]
 
     def __reversed__(self) -> Iterator[T]:
-        return True
+        for i in self.__elements[::-1]:
+            yield i
 
     def __delitem__(self, index: int) -> None:
         for i in range(index, self.__logical_size - 1):
@@ -125,13 +124,11 @@ class Array(IArray[T]):
 
     def __contains__(self, item: Any) -> bool:
         return item in self.__elements 
-        # raise NotImplementedError('Contains not implemented.')
 
     def clear(self) -> None:
         self.__logical_size = 0
         self.__capacity = 0
         self.__elements = np.empty(0, dtype = self.__datatype)
-        # raise NotImplementedError('Clear not implemented.')
 
     def __str__(self) -> str:
         return '[' + ', '.join(str(item) for item in self.__elements) + ']'
