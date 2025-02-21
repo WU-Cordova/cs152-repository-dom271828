@@ -11,7 +11,10 @@ class Array2D(IArray2D[T]):
 
     class Row(IArray2D.IRow[T]):
         def __init__(self, row_index: int, array: IArray, num_columns: int) -> None:
-            raise NotImplementedError('Row.__init__ not implemented.')
+            self.__row_index = row_index
+            self.__array = array
+            self.__num_columns = num_columns
+            # raise NotImplementedError('Row.__init__ not implemented.')
 
         def __getitem__(self, column_index: int) -> T:
             # returns row
