@@ -40,13 +40,25 @@ class Array2D(IArray2D[T]):
 
 
     def __init__(self, starting_sequence: Sequence[Sequence[T]]=[[]], data_type=object) -> None:
-        raise NotImplementedError('Array2D.__init__ not implemented.')
+        self.__data_type = data_type
+        self.__rows_len = len(starting_sequence)
+        self.__cols_len = len(starting_sequence[0])
+
+        py_list = []
+        for row in range(self.__rows_len):
+            for col in range(self.__cols_len):
+                py_list.append(starting_sequence[row][col])
+
+        self.__elements2d = Array(py_list, data_type)
 
     @staticmethod
     def empty(rows: int=0, cols: int=0, data_type: type=object) -> Array2D:
+        sequence2d = [[data_type() for _ in range(cols) for _ in range(rows)]]
+        # return Array2d for this
         raise NotImplementedError('Array2D.empty not implemented.')
 
     def __getitem__(self, row_index: int) -> Array2D.IRow[T]: 
+        return Array2d.Row(row_index=row_index, self.__array, self.__num_cols)
         raise NotImplementedError('Array2D.__getitem__ not implemented.')
     
     def __iter__(self) -> Iterator[Sequence[T]]: 
