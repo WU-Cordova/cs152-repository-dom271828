@@ -77,6 +77,7 @@ class TestArray2D:
     def test_reverse_iteration(self, filled3x3: Array2D[int]) -> None:
         """Verifies that reversed(Array2D) correctly reverses row order."""
         reversed_rows = list(reversed(filled3x3))
+        print(f"rows are{reversed_rows}")
         expected = [[7, 8, 9], [4, 5, 6], [1, 2, 3]]
         assert [list(row) for row in reversed_rows] == expected
 

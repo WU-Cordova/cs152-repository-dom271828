@@ -28,7 +28,7 @@ class Array(IArray[T]):
         
         for i in starting_sequence:
             if type(i) != self.__datatype:
-                raise TypeError
+                raise TypeError()
             
         self.__elements = np.empty(self.__logical_size, dtype = self.__datatype)
 
@@ -41,7 +41,7 @@ class Array(IArray[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         if isinstance(index, slice):
-            if index.start > self.__logical_size - 1 or index.stop > self.__logical_size - 1:
+            if index.start > self.__logical_size or index.stop > self.__logical_size - 1:
                 raise ValueError
             
             start: int = 0 if index.start == None else index.start
@@ -59,12 +59,14 @@ class Array(IArray[T]):
     
     
     def __setitem__(self, index: int, item: T) -> None:
-        if index in range(self.__elements) and type(item) == self.__datatype:
-            self.__elements[index] = item
-        elif index not in range(self.__elements):
+        # if index in range(self.__elements) and type(item) == self.__datatype:
+        if index not in range(self.__logical_size):
             raise ValueError("Index is out of bounds")
-        elif type(item != self.__datatype):
+    
+        if type(item) != self.__datatype:
             raise TypeError("item does not match datatype")
+        
+        self.__elements[index] = item
 
     def append(self, data: T) -> None:
         self.__logical_size += 1
