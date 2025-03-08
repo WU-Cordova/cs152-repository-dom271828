@@ -47,7 +47,6 @@ class Array2D(IArray2D[T]):
 
 
     def __init__(self, starting_sequence: Sequence[Sequence[T]]=[[]], data_type=object) -> None:
-        print(type(starting_sequence))
         if not isinstance(starting_sequence, Sequence):
             raise ValueError("must be a sequence of sequences")
         else:
@@ -96,6 +95,20 @@ class Array2D(IArray2D[T]):
     
     def __len__(self):
         return self.__rows_len
+    
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Array2D):
+            return False
+
+        if self.__rows_len != other.__rows_len or self.__cols_len != other.__cols_len:
+            return False
+
+        for row in range(self.__rows_len):
+            for col in range(self.__cols_len):
+                if self[row][col] != other[row][col]:
+                    return False
+
+        return True
                                   
     def __str__(self) -> str: 
         return f'[{", ".join(f"{str(row)}" for row in self)}]'
@@ -105,5 +118,7 @@ class Array2D(IArray2D[T]):
 
 
 if __name__ == '__main__':
+    empty3x3 = Array2D.empty(rows=3, cols=3, data_type=int)
+    empty3x3 == Array2D.empty(rows=3, cols=3, data_type=int)
     filename = os.path.basename(__file__)
     print(f'This is the {filename} file.\nDid you mean to run your tests or program.py file?\nFor tests, run them from the Test Explorer on the left.')

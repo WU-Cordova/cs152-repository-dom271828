@@ -95,7 +95,6 @@ class Array(IArray[T]):
         if self.__logical_size <= self.__capacity//4:
             self.__capacity //= 2
 
-
     def __len__(self) -> int:
         return self.__logical_size
 
