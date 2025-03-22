@@ -62,8 +62,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 bool: True if the stack is full, False otherwise.
         '''
-        print(self._top)
-        return self._top - 1 == self._maxsize
+        return self._top == self._maxsize
         # raise NotImplementedError
 
     @property
