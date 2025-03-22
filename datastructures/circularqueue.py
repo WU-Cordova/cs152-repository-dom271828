@@ -22,8 +22,8 @@ class CircularQueue(IQueue[T]):
         self._front = 1
         self._count = 0
         self._max_size = maxsize
-        self._data_type = data_type
-        self.circularqueue = Array(starting_sequence=[data_type() for _ in range(maxsize + 1)], data_type=data_type)
+        self._data_type = int if data_type == object else data_type
+        self.circularqueue = Array(starting_sequence=[self._data_type() for _ in range(maxsize + 1)], data_type=data_type)
         # raise NotImplementedError
 
     def enqueue(self, item: T) -> None:
@@ -156,7 +156,7 @@ class CircularQueue(IQueue[T]):
         if not isinstance(other, CircularQueue):
             return False
 
-        if self.front != other.front or self.rear != other.rear:
+        if self._front != other._front or self._rear != other._rear:
             return False
         
         return True

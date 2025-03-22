@@ -59,7 +59,6 @@ class Array(IArray[T]):
     
     
     def __setitem__(self, index: int, item: T) -> None:
-        # if index in range(self.__elements) and type(item) == self.__datatype:
         if index not in range(self.__logical_size):
             raise ValueError("Index is out of bounds")
     
