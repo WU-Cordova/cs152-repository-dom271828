@@ -56,7 +56,6 @@ class CircularQueue(IQueue[T]):
         self.circularqueue[self._rear - 1] = item
         self._count += 1
         self._rear = self._rear + 1 % self._max_size
-        # raise NotImplementedError
 
     def dequeue(self) -> T:
         ''' Removes and returns the item at the front of the queue
