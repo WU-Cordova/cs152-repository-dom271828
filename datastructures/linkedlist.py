@@ -25,28 +25,33 @@ class LinkedList[T](ILinkedList[T]):
         linked_list: LinkedList[T] = LinkedList(data_type=data_type)
         for item in sequence:
             linked_list.append(item)
-
+        
         return linked_list
 
     def append(self, item: T) -> None:
-        # Check if item is instance of data_type
-        # instantiate new nodwe w/data
-        # Append iem at the end
-        # In empty cases: 
+        if not isinstance(item, self.data_type):
+            raise(TypeError)
         new_node: LinkedList.Node = LinkedList.Node(data = item)
         if self.empty:
             self.head = self.tail = new_node
         else:
+            old_tail = self.tail
             self.tail.next = self.tail = new_node
+            new_node.previous = old_tail
         self.count += 1
 
     def prepend(self, item: T) -> None:
         # opposite of append
+        if not isinstance(item, self.data_type):
+            raise(TypeError)
+        
         new_node: LinkedList.Node = LinkedList.Node(data = item)
         if self.empty:
             self.head = self.tail = new_node
         else:
+            old_head = self.head
             self.head.previous = self.head = new_node 
+            new_node.next = old_head
         self.count += 1
 
     def insert_before(self, target: T, item: T) -> None:
@@ -55,6 +60,9 @@ class LinkedList[T](ILinkedList[T]):
         # set new_node.prev to target.prev
         # set new_node.next to target
         # set travel.previous to new_node (ts could use prepend)
+        if not isinstance(item, self.data_type) or not isinstance(target, self.data_type):
+            raise(TypeError)
+        
         new_node: LinkedList.Node = LinkedList.Node(data = item)
 
         if self.head and self.head.data == target:
@@ -82,6 +90,9 @@ class LinkedList[T](ILinkedList[T]):
         # raise NotImplementedError("LinkedList.insert_before is not implemented")
 
     def insert_after(self, target: T, item: T) -> None:
+        if not isinstance(target, self.data_type) or not isinstance(item, self.data_type):
+            raise(TypeError)
+        
         new_node: LinkedList.Node = LinkedList.Node(data = item)
 
         if self.tail and self.tail.data == target:
@@ -99,18 +110,69 @@ class LinkedList[T](ILinkedList[T]):
         if travel is None:
             raise(ValueError(f"ts target({target}) is not in the list"))
         
-        # travel.previous = new_node
+        travel.next.previous = new_node
+        new_node.next = travel.next
+        new_node.previous = travel
+        travel.next = new_node
         self.count += 1
         # raise NotImplementedError("LinkedList.insert_after is not implemented")
 
     def remove(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.remove is not implemented")
+        if not isinstance(item, self.data_type):
+            raise(TypeError)
+        
+        if self.head and self.head.data == item:
+            self.pop()
+            return
 
+        travel = self.head
+        while travel is not None:
+
+            if travel.data == item:
+                break
+
+            travel = travel.next
+        
+        if travel is None:
+            raise(ValueError(f"ts target({item}) is not in the list"))
+        
+        travel.previous.next = travel.next
+        travel.next.previous = travel.previous
+        travel = None
+        return
+    
     def remove_all(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.remove_all is not implemented")
+        if not isinstance(item, self.data_type):
+            raise(TypeError)
+        
+        if self.head and self.head.data == item:
+            self.pop_front()
+            return
+
+        travel = self.head
+        while travel is not None:
+            if travel.data == item:
+
+                if travel == self.tail:
+                    self.tail = travel.previous
+                    self.tail.next = None
+                    self.count -= 1
+                    return
+                
+                self.count -= 1
+                travel.previous.next = travel.next
+                travel.next.previous = travel.previous
+
+            travel = travel.next
+        
+        if self.tail.data == item:
+            self.pop()
+        
+        if travel is None:
+            raise(ValueError(f"ts target({item}) is not in the list"))
+
 
     def pop(self) -> T:
-        print(self)
         if not self.empty:
             data = self.tail.data
             self.tail.previous = self.tail
@@ -150,15 +212,16 @@ class LinkedList[T](ILinkedList[T]):
         return self.count
 
     def clear(self) -> None:
-        raise NotImplementedError("LinkedList.clear is not implemented")
+        self.count = 0
+        self.head = None
+        self.tail = None
 
     def __contains__(self, item: T) -> bool:
         for i in self:
             if i == item:
                 return True
         return False
-        # raise NotImplementedError("LinkedList.__contains__ is not implemented")
-
+    
     def __iter__(self) -> ILinkedList[T]:
         self.travel_node = self.head
         return self
@@ -171,10 +234,35 @@ class LinkedList[T](ILinkedList[T]):
         return data
     
     def __reversed__(self) -> ILinkedList[T]:
-        raise NotImplementedError("LinkedList.__reversed__ is not implemented")
+        reversed_list = LinkedList(data_type=self.data_type)
+        reverse_travel = self.tail
+
+        while reverse_travel is not None:
+            reversed_list.append(reverse_travel.data)
+            reverse_travel = reverse_travel.previous
+        
+        return reversed_list
+
     
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError("LinkedList.__eq__ is not implemented")
+        
+        if not isinstance(other, LinkedList):
+            return False
+        
+        if self.count != other.count:
+            return False
+
+        self_travel = self.head
+        other_travel = other.head
+
+        while self_travel and other_travel:
+            if self_travel.data != other_travel.data:
+                return False
+            self_travel = self_travel.next
+            other_travel = other_travel.next
+
+        return True
+        
 
     def __str__(self) -> str:
         items = []
