@@ -21,7 +21,6 @@ class ListStack(IStack[T]):
         self.data_type = data_type
         self.elements = LinkedList(data_type)
         self.count = 0
-        # raise NotImplementedError("ListStack.__init__ is not implemented.")
 
     def push(self, item: T):
         """
@@ -36,7 +35,6 @@ class ListStack(IStack[T]):
         """
         self.elements.append(item=item)
         self.count += 1
-        # raise NotImplementedError("ListStack.push is not implemented.")
 
     def pop(self) -> T:
         """
@@ -48,7 +46,8 @@ class ListStack(IStack[T]):
         Raises:
             IndexError: If the stack is empty.
         """
-        raise NotImplementedError("ListStack.pop is not implemented.")
+        self.count -= 1
+        return self.elements.pop()
 
     def peek(self) -> T:
         """
@@ -60,7 +59,7 @@ class ListStack(IStack[T]):
         Raises:
             IndexError: If the stack is empty.
         """
-        return self.elements.front
+        return self.elements.back
 
     @property
     def empty(self) -> bool:
@@ -106,7 +105,6 @@ class ListStack(IStack[T]):
             return False
         
         return self.elements == other.elements
-        # raise NotImplementedError("ListStack.__eq__ is not implemented.")
 
     def __len__(self) -> int:
         """
@@ -125,7 +123,6 @@ class ListStack(IStack[T]):
             str: A string representation of the stack.
         """
         return str(self.elements)
-        # raise NotImplementedError("ListStack.__str__ is not implemented.")
 
     def __repr__(self) -> str:
         """
@@ -136,7 +133,6 @@ class ListStack(IStack[T]):
 
         """
         return repr(self.elements)
-        # raise NotImplementedError("ListStack.__repr__ is not implemented.")
     
 
 if __name__ == '__main__':

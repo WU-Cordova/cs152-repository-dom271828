@@ -175,7 +175,7 @@ class LinkedList[T](ILinkedList[T]):
     def pop(self) -> T:
         if not self.empty:
             data = self.tail.data
-            self.tail.previous = self.tail
+            self.tail = self.tail.previous
             self.tail.next = None
             self.count -= 1
             return data
@@ -187,6 +187,7 @@ class LinkedList[T](ILinkedList[T]):
             data = self.head.data
             self.head.previous = self.head
             self.head.previous = None
+            self.head = self.head.next 
             self.count -= 1
             return data
         else:

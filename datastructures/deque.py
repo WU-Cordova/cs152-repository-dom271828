@@ -20,7 +20,6 @@ class Deque[T](IQueue[T]):
         self.data_type = data_type
         self.elements = LinkedList(data_type=data_type)
         self.count = 0
-        # raise NotImplementedError("Deque initialization is not implemented.")
 
     def enqueue(self, item: T) -> None:
         """
@@ -34,7 +33,6 @@ class Deque[T](IQueue[T]):
         """
         self.elements.append(item)
         self.count += 1
-        # raise NotImplementedError("Method to add an item to the back of the deque is not implemented.")
 
     def dequeue(self) -> T:
         """
@@ -46,11 +44,8 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        item = self.elements.front()
-        self.elements.pop_front()
         self.count -= 1
-        return item
-        # raise NotImplementedError("Method to remove an item from the front of the deque is not implemented.")
+        return self.elements.pop_front()
 
     def enqueue_front(self, item: T) -> None:
         """
@@ -75,7 +70,9 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to remove an item from the back of the deque is not implemented.")
+        self.count -= 1
+        return self.elements.pop()
+
 
     def front(self) -> T:
         """
@@ -88,7 +85,6 @@ class Deque[T](IQueue[T]):
             - IndexError: If the deque is empty.
         """
         return self.elements.front
-        # raise NotImplementedError("Method to get the front item of the deque is not implemented.")
 
     def back(self) -> T:
         """
@@ -101,7 +97,6 @@ class Deque[T](IQueue[T]):
             - IndexError: If the deque is empty.
         """
         return self.elements.back
-        # raise NotImplementedError("Method to get the back item of the deque is not implemented.")
 
     def empty(self) -> bool:
         """
@@ -121,7 +116,6 @@ class Deque[T](IQueue[T]):
             - int: The number of items in the deque.
         """
         return self.count
-        # raise NotImplementedError("Method to get the length of the deque is not implemented.")
     
     def __contains__(self, item: T) -> bool:
         """
@@ -134,7 +128,6 @@ class Deque[T](IQueue[T]):
             - bool: True if the item exists in the deque, False otherwise.
         """
         return item in self.elements
-        # raise NotImplementedError("Method to check if an item exists in the deque is not implemented.")
     
     def __eq__(self, other) -> bool:
         """
@@ -150,7 +143,6 @@ class Deque[T](IQueue[T]):
             return False
         
         return self.elements == other.elements
-        # raise NotImplementedError("Method to compare two deques is not implemented.")
     
     def clear(self):
         """
@@ -167,8 +159,7 @@ class Deque[T](IQueue[T]):
             - str: A string representation of the deque.
         """
         return str(self.elements)
-        raise NotImplementedError("Method to get the string representation of the deque is not implemented.")
-    
+        
     def __repr__(self) -> str:
         """
         Returns a detailed string representation of the deque.
@@ -177,8 +168,6 @@ class Deque[T](IQueue[T]):
             - str: A detailed string representation of the deque.
         """
         return repr(self.elements)
-        raise NotImplementedError("Method to get the detailed string representation of the deque is not implemented.")
-
 
 if __name__ == '__main__':
     filename = os.path.basename(__file__)
