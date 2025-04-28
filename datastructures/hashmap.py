@@ -24,19 +24,22 @@ class HashMap(IHashMap[KT, VT]):
         bucket_index = self._hash_function(key)
         return bucket_index % bucket_size
 
+    @staticmethod
     def _next_prime(n: int) -> int:
 
         def is_prime(wow: int) -> bool:
+            for i in range(wow):
+                if i % wow == 0:
+                    return True
             return False
-        
+                
         while not is_prime(n):
             n += 1
         
         return n
 
-    def _resize(self, number: int) -> None:
-        pass
-        # return self._next_prime(number)
+    def _resize(self, number: int) -> int:
+        self._capacity = self._next_prime(number)
 
     def __getitem__(self, key: KT) -> VT:
         bucket = self._buckets[self._get_bucket_number(key, len(self._buckets))]
@@ -58,7 +61,7 @@ class HashMap(IHashMap[KT, VT]):
             self._count += 1
         else:
             bucket.prepend((key, value))
-            self._count += 1
+            self._count = (self._count + 1 % self._capacity)
 
 
     def keys(self) -> Iterator[KT]:
@@ -100,8 +103,8 @@ class HashMap(IHashMap[KT, VT]):
     
     def __iter__(self) -> Iterator[KT]:
         for bucket in self._buckets:
-            for k, v in bucket:
-                yield (k, v)
+            for (k, v) in bucket:
+                yield k
     
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
