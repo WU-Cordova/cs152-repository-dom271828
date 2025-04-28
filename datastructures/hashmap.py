@@ -36,6 +36,7 @@ class HashMap(IHashMap[KT, VT]):
 
     def _resize(self, number: int) -> None:
         pass
+        # return self._next_prime(number)
 
     def __getitem__(self, key: KT) -> VT:
         bucket = self._buckets[self._get_bucket_number(key, len(self._buckets))]
@@ -74,11 +75,10 @@ class HashMap(IHashMap[KT, VT]):
             
     def __delitem__(self, key: KT) -> None:
         bucket = self._buckets[self._get_bucket_number(key, len(self._buckets))]
-        # bucket.pop()
         if bucket.empty:
             raise KeyError("Item not in hashmap.")
         else:
-            bucket.pop()
+            bucket.pop_front()
             
     
     def __contains__(self, key: KT) -> bool:
