@@ -90,7 +90,7 @@ class HashMap(IHashMap[KT, VT]):
 
         # 3. Search for key if it exists
         for (k, v) in bucket_chain:
-            if k == v:
+            if k == key:
                 return True # FOUND!!
         
         return False
