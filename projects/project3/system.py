@@ -16,6 +16,7 @@ class BistroSystem:
         self.confirmation: LinkedList[OrderItem] = LinkedList(data_type=OrderItem)
         self.openqueue: CircularQueue[CustomerOrder] = CircularQueue(maxsize=10, data_type=CustomerOrder)
         self.completed: LinkedList[CustomerOrder] = LinkedList(data_type=CustomerOrder)
+        self.auto = False
     
     def display_menu(self):
         """Prints menu like such:
@@ -24,7 +25,7 @@ class BistroSystem:
         count = 1
         for drink in self.menu:
             print(f"{count}. {drink}")
-            count += 1
+            count += 1 # Count increases with display
 
     def take_new_order(self):
         """Command that:
@@ -62,6 +63,8 @@ class BistroSystem:
 
         if valid == "Y":
             self.openqueue.enqueue(order)
+            if self.auto == True:
+                self.mark_completed() # stealthily adds order to completed if auto is true
 
     
     def view_open_orders(self):
@@ -73,8 +76,10 @@ class BistroSystem:
                 if order.name != None:
                     count += 1
                     order.display(count)
+        elif self.auto == True:
+            print("Automatic mode is on.") # If auto mode is on
         else:
-            print("No open orders to display.")
+            print("No open orders to display.") # If triggered with an empty queue
     
     def mark_completed(self):
         """ Command that dequeues first order in open orders queue and adds it to completed orders,
@@ -82,7 +87,10 @@ class BistroSystem:
         if not self.openqueue.empty:
             complete = self.openqueue.dequeue()
             self.completed.append(complete)
-            print(f"Completed order for {complete.name}!")
+            if self.auto == False:
+                print(f"Completed order for {complete.name}!")
+        elif self.auto == True:
+            print("Automatic mode is on.")
         else:
             print("No open orders to mark.")
 
@@ -99,18 +107,21 @@ class BistroSystem:
                 for drink in drinkorder.order:
                     if drink.drink == item:
                         quantity += 1
-                        drinkrevenue += drink.drink.price
-            totalrevenue += drinkrevenue
+                        drinkrevenue += drink.drink.price # Adds revenue per particular drink
+            totalrevenue += drinkrevenue # Adds revenue per any drink
             if quantity > 0:
-                print(f"{item.item}/ {quantity}/ ${drinkrevenue}")
-        print(f"Total Revenue: {totalrevenue}")
+                print(f"{item.item}/ {quantity}/ ${drinkrevenue}") # Compact
+        print(f"Total Revenue: {totalrevenue}") 
     
     def run(self):
         """ Main program command, controls main menu and user interface by prompting users to input numbers 
         based on the action they would like to take """
-        
+
         finished = False
         print("Welcome to the Bistro!!!")
+        mode = input("Would you like to automatically mark orders as complete? (yes/no) ").strip().upper() # Maybe not the best setting for a busy coffee shop, but oh well
+        if mode == "YES":
+            self.auto = True
         print("1. Display Menu")
         print("2. Take New Order")
         print("3. View Open Orders")

@@ -60,7 +60,7 @@ class CustomerOrder:
         self._order : LinkedList = LinkedList(data_type=OrderItem)
     
     def add_order_item(self, item: OrderItem) -> None:
-        """ Appends order to order linkedlist """
+        """ Appends order to order linkedlist. """
         self._order.append(item)
 
     @property
@@ -76,7 +76,7 @@ class CustomerOrder:
         self._name = name
 
     def display(self, count):
-        """ Displays order
+        """ Displays order.
         Example: 
         1. John: Mocha (Oatmilk, Espresso), London Fog (Extra Hot)"""
         print(f"{count}. {self.name}: {", ".join([i.__str__() for i in self.order])}")
