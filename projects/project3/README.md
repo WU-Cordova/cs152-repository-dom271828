@@ -21,6 +21,6 @@
     OH, and the ordering multiple drinks isn't implemented exactly like it is on the canvas page. There's a limit for drinks someone can order which the user chooses, but I just keep asking for input until the user wants to stop ordering drinks. 
 
 5. Anything else:
-    This is already late as is, but I'd say a coupon system, a separate food menu/class, and some type of setting to auto-mark orders as complete were in the running to add. Actually, I think I'll add the last one right now, it's easy enough, but the others would definitely take a little time to ponder on. 
+    This is already late as is, but I'd say a coupon system, additional charges on certain customizations, a separate food menu/class, and some type of setting to auto-mark orders as complete were in the running to add. Actually, I think I'll add the last one right now, it's easy enough, but the others would definitely take a little time to ponder on. 
 
 Thank you for a great semester! It was great having you as my teacher. You were always very helpful and also extremely accomodating with due dates and such. Excited to have you again next semester, have an amazing summer!
