@@ -68,8 +68,8 @@ class Array(IArray[T]):
         self.__elements[index] = item
 
     def append(self, data: T) -> None:
+        self.__elements[self.__logical_size - 1] = data
         self.__logical_size += 1
-        self.__elements[self.__logical_size - 2] = data
         if self.__logical_size == self.__capacity:
             self.__capacity *= 2
         return None

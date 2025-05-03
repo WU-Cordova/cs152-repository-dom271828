@@ -23,7 +23,7 @@ class CircularQueue(IQueue[T]):
         self._count = 0
         self._max_size = maxsize
         self._data_type = int if data_type == object else data_type
-        self.circularqueue = Array(starting_sequence=[self._data_type() for _ in range(maxsize + 1)], data_type=data_type)
+        self.circularqueue = Array(starting_sequence=[self._data_type() for _ in range(maxsize)], data_type=data_type)
         # raise NotImplementedError
 
     def enqueue(self, item: T) -> None:
@@ -53,7 +53,7 @@ class CircularQueue(IQueue[T]):
         '''
         if self.full:
             raise(IndexError("Queue is full"))
-        self.circularqueue[self._rear - 1] = item
+        self.circularqueue[self._rear - 1 % self._max_size] = item
         self._count += 1
         self._rear = self._rear + 1 % self._max_size
 
@@ -83,8 +83,7 @@ class CircularQueue(IQueue[T]):
                 IndexError: If the queue is empty
         '''
         pop = self.circularqueue[self._front - 1]
-        print(pop)
-        self.circularqueue[self._front - 1] = self._data_type()
+        self.circularqueue[self._front - 1 % self._max_size] = self._data_type()
         self._front = (self._front + 1) % self._max_size
         self._count -= 1
         return pop
@@ -92,8 +91,10 @@ class CircularQueue(IQueue[T]):
 
     def clear(self) -> None:
         ''' Removes all items from the queue '''
+        self._rear = 1
+        self._front = 1
+        self._count = 0
         self.circularqueue = Array(starting_sequence=[self._data_type() for _ in range(self._max_size)], data_type=self._data_type)
-        raise NotImplementedError
 
     @property
     def front(self) -> T:
@@ -155,8 +156,9 @@ class CircularQueue(IQueue[T]):
         if not isinstance(other, CircularQueue):
             return False
 
-        if self._front != other._front or self._rear != other._rear:
-            return False
+        for i in range(self._count):
+            if self.circularqueue[(self._front + i) % self._max_size] != other.circularqueue[(other._front + i) % other._max_size]:
+                return False
         
         return True
          

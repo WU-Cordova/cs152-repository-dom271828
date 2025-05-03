@@ -38,9 +38,18 @@ class HashMap(IHashMap[KT, VT]):
         
         return n
 
-    def _resize(self, number: int) -> int:
-        self._capacity = self._next_prime(number)
-
+    def _resize(self) -> int:
+        new_size = self._next_prime(self._capacity)
+        new_buckets = [LinkedList(data_type=tuple) for _ in range(new_size)]
+        
+        for bucket in self._buckets:
+            for key, value in bucket:
+                new_index = self._hash_function(key) % new_size
+                new_buckets[new_index].append((key, value))
+        
+        self._buckets = new_buckets 
+        self._capacity = new_size
+    
     def __getitem__(self, key: KT) -> VT:
         bucket = self._buckets[self._get_bucket_number(key, len(self._buckets))]
         for (k, v) in bucket:
@@ -52,7 +61,7 @@ class HashMap(IHashMap[KT, VT]):
 
     def __setitem__(self, key: KT, value: VT) -> None:
         if self._count / len(self._buckets) >= self._load_factor:
-            self._resize(self._capacity)
+            self._resize()
         # Prime:
         # Double Current
         bucket = self._buckets[self._get_bucket_number(key, len(self._buckets))]
@@ -70,7 +79,7 @@ class HashMap(IHashMap[KT, VT]):
     
     def values(self) -> Iterator[VT]:
         for (key, value) in self:
-            yield key[value]
+            yield value
 
 
     def items(self) -> Iterator[Tuple[KT, VT]]:

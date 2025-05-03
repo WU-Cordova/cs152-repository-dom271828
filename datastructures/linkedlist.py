@@ -30,7 +30,7 @@ class LinkedList[T](ILinkedList[T]):
 
     def append(self, item: T) -> None:
         if not isinstance(item, self.data_type):
-            raise(TypeError)
+            raise(TypeError(f"item is not {self.data_type}"))
         new_node: LinkedList.Node = LinkedList.Node(data = item)
         if self.empty:
             self.head = self.tail = new_node
